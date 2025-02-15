@@ -31,6 +31,9 @@ function M.get_makefile_options(path)
 
     -- Iterate through each line in the Makefile
     for line in file:lines() do
+      if line:match "^%s" then
+        goto continue
+      end
       -- Check for lines starting with a target rule (e.g., "target: dependencies")
       local target = line:match "^%s*([^#%s][^:]*)%s*:"
       if target then
@@ -45,6 +48,7 @@ function M.get_makefile_options(path)
         -- If we're inside a target block, stop adding options
         in_target = false
       end
+      ::continue::
     end
 
     -- Close the Makefile
